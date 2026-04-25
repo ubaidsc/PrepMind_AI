@@ -24,7 +24,8 @@ GoRouter appRouter(Ref ref) {
     redirect: (context, state) {
       final session = supabase.auth.currentSession;
       final isAuth = session != null;
-      final isAuthRoute = state.matchedLocation.startsWith('/login') ||
+      final isAuthRoute =
+          state.matchedLocation.startsWith('/login') ||
           state.matchedLocation.startsWith('/signup') ||
           state.matchedLocation.startsWith('/forgot-password');
 
@@ -36,8 +37,9 @@ GoRouter appRouter(Ref ref) {
       GoRoute(path: '/login', builder: (c, s) => const LoginScreen()),
       GoRoute(path: '/signup', builder: (c, s) => const SignupScreen()),
       GoRoute(
-          path: '/forgot-password',
-          builder: (c, s) => const ForgotPasswordScreen()),
+        path: '/forgot-password',
+        builder: (c, s) => const ForgotPasswordScreen(),
+      ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
@@ -47,8 +49,9 @@ GoRouter appRouter(Ref ref) {
             builder: (c, s) => const SubjectsScreen(),
             routes: [
               GoRoute(
-                  path: 'create',
-                  builder: (c, s) => const CreateSubjectScreen()),
+                path: 'create',
+                builder: (c, s) => const CreateSubjectScreen(),
+              ),
               GoRoute(
                 path: ':id',
                 builder: (c, s) =>
@@ -56,8 +59,7 @@ GoRouter appRouter(Ref ref) {
               ),
             ],
           ),
-          GoRoute(
-              path: '/practice', builder: (c, s) => const PracticeScreen()),
+          GoRoute(path: '/practice', builder: (c, s) => const PracticeScreen()),
           GoRoute(path: '/profile', builder: (c, s) => const ProfileScreen()),
         ],
       ),

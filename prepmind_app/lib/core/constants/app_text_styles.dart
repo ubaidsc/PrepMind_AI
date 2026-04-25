@@ -22,10 +22,7 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  static const body = TextStyle(
-    fontSize: 15,
-    color: AppColors.textPrimary,
-  );
+  static const body = TextStyle(fontSize: 15, color: AppColors.textPrimary);
 
   static const bodySecondary = TextStyle(
     fontSize: 14,

@@ -7,39 +7,47 @@ import '../../../shared/widgets/app_text_field.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/utils/validators.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _isGoogleLoading = false;
   bool _obscurePassword = true;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _signIn() async {
+  Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
     try {
-      await ref
-          .read(authRepositoryProvider)
-          .signIn(
+      await ref.read(authRepositoryProvider).signUp(
             email: _emailController.text.trim(),
             password: _passwordController.text,
+            fullName: _nameController.text.trim(),
           );
-      if (mounted) context.go('/home');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Check your email to confirm your account.'),
+            backgroundColor: AppColors.secondary,
+          ),
+        );
+        context.go('/login');
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -51,24 +59,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _signInWithGoogle() async {
-    setState(() => _isGoogleLoading = true);
-    try {
-      await ref.read(authRepositoryProvider).signInWithGoogle();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            backgroundColor: AppColors.error,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isGoogleLoading = false);
     }
   }
 
@@ -86,15 +76,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 const SizedBox(height: 40),
                 const Text(
-                  'Welcome back 👋',
+                  'Create account 🎓',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Sign in to continue studying',
+                  'Start your AI-powered study journey',
                   style: TextStyle(color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 40),
+                AppTextField(
+                  label: 'Full Name',
+                  hint: 'John Doe',
+                  controller: _nameController,
+                  keyboardType: TextInputType.name,
+                  validator: Validators.fullName,
+                ),
+                const SizedBox(height: 16),
                 AppTextField(
                   label: 'Email',
                   hint: 'you@example.com',
@@ -119,38 +117,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   validator: Validators.password,
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => context.push('/forgot-password'),
-                    child: const Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: AppColors.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 32),
                 AppButton(
-                  label: 'Sign In',
-                  onPressed: _signIn,
+                  label: 'Create Account',
+                  onPressed: _signUp,
                   isLoading: _isLoading,
                 ),
-                const SizedBox(height: 16),
-                AppButton(
-                  label: 'Continue with Google',
-                  onPressed: _signInWithGoogle,
-                  isOutlined: true,
-                  isLoading: _isGoogleLoading,
-                ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Don't have an account? "),
+                    const Text('Already have an account? '),
                     TextButton(
-                      onPressed: () => context.go('/signup'),
+                      onPressed: () => context.go('/login'),
                       child: const Text(
-                        'Sign Up',
+                        'Sign In',
                         style: TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w600,

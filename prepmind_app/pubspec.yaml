@@ -1,6 +1,6 @@
 name: prepmind_app
 description: AI-powered exam preparation app
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
