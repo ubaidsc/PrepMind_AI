@@ -14,8 +14,7 @@ class SubjectDetailScreen extends ConsumerWidget {
 
     return subjectAsync.when(
       data: (subject) {
-        final color = Color(
-            int.parse(subject.color.replaceAll('#', '0xFF')));
+        final color = Color(int.parse(subject.color.replaceAll('#', '0xFF')));
         return Scaffold(
           backgroundColor: Colors.white,
           body: CustomScrollView(
@@ -25,8 +24,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                 pinned: true,
                 backgroundColor: color,
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios,
-                      color: Colors.white),
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                   onPressed: () => context.pop(),
                 ),
                 flexibleSpace: FlexibleSpaceBar(
@@ -39,8 +37,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.delete_outline,
-                        color: Colors.white),
+                    icon: const Icon(Icons.delete_outline, color: Colors.white),
                     onPressed: () => _confirmDelete(context, ref),
                   ),
                 ],
@@ -157,8 +154,7 @@ class _InfoRow extends StatelessWidget {
         const SizedBox(width: 8),
         Text('$label: ',
             style: const TextStyle(color: AppColors.textSecondary)),
-        Text(value,
-            style: const TextStyle(fontWeight: FontWeight.w600)),
+        Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
       ],
     );
   }
