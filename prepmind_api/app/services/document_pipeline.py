@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, timezone
 from app.core.document_processor import DocumentProcessor
 from app.core.gemini import get_gemini
 from app.core.supabase import get_supabase_client
@@ -78,13 +79,13 @@ async def process_document(
             "subject_id", subject_id
         ).execute()
 
+        now_iso = datetime.now(timezone.utc).isoformat()
         if existing.data:
             ctx = existing.data[0]
             supabase.table("subject_context").update({
                 "total_chunks": ctx["total_chunks"] + len(chunks),
                 "total_tokens_indexed": ctx["total_tokens_indexed"] + total_tokens,
-                "last_indexed_at": "now()",
-                "updated_at": "now()",
+                "last_indexed_at": now_iso,
             }).eq("subject_id", subject_id).execute()
         else:
             supabase.table("subject_context").insert({
@@ -92,7 +93,7 @@ async def process_document(
                 "user_id": user_id,
                 "total_chunks": len(chunks),
                 "total_tokens_indexed": total_tokens,
-                "last_indexed_at": "now()",
+                "last_indexed_at": now_iso,
             }).execute()
 
         # Step 7: Increment document count on subject

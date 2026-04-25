@@ -7,15 +7,15 @@ part 'subject_model.g.dart';
 class Subject with _$Subject {
   const factory Subject({
     required String id,
-    required String userId,
+    @JsonKey(name: 'user_id') required String userId,
     required String name,
-    String? examType,
+    @JsonKey(name: 'exam_type') String? examType,
     String? semester,
     @Default('#6366F1') String color,
-    @Default(0) int documentCount,
-    @Default(0) int aiNoteCount,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    @JsonKey(name: 'document_count') @Default(0) int documentCount,
+    @JsonKey(name: 'ai_note_count') @Default(0) int aiNoteCount,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'updated_at') required DateTime updatedAt,
   }) = _Subject;
 
   factory Subject.fromJson(Map<String, dynamic> json) =>

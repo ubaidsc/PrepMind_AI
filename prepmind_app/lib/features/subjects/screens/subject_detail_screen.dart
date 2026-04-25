@@ -45,7 +45,7 @@ class _SubjectDetailScreenState extends ConsumerState<SubjectDetailScreen>
           body: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverAppBar(
-                expandedHeight: 140,
+                expandedHeight: 160,
                 pinned: true,
                 backgroundColor: color,
                 leading: IconButton(
@@ -53,10 +53,15 @@ class _SubjectDetailScreenState extends ConsumerState<SubjectDetailScreen>
                   onPressed: () => context.pop(),
                 ),
                 flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: const EdgeInsets.only(left: 56, bottom: 60),
                   title: Text(
                     subject.name,
                     style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   background: Container(color: color),
                 ),

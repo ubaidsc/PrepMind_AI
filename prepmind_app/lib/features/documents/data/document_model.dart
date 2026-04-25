@@ -7,17 +7,17 @@ part 'document_model.g.dart';
 class DocumentModel with _$DocumentModel {
   const factory DocumentModel({
     required String id,
-    required String subjectId,
-    required String userId,
+    @JsonKey(name: 'subject_id') required String subjectId,
+    @JsonKey(name: 'user_id') required String userId,
     required String name,
-    required String fileType,
-    required int fileSizeBytes,
-    required String storagePath,
+    @JsonKey(name: 'file_type') required String fileType,
+    @JsonKey(name: 'file_size_bytes') required int fileSizeBytes,
+    @JsonKey(name: 'storage_path') required String storagePath,
     @Default('uploaded') String status,
-    int? pageCount,
-    String? errorMessage,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    @JsonKey(name: 'page_count') int? pageCount,
+    @JsonKey(name: 'error_message') String? errorMessage,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'updated_at') required DateTime updatedAt,
   }) = _DocumentModel;
 
   factory DocumentModel.fromJson(Map<String, dynamic> json) =>

@@ -28,6 +28,7 @@ class SubjectRepository {
           'exam_type': examType,
           'semester': semester,
           'color': color,
+          'user_id': _supabase.auth.currentUser!.id,
         })
         .select()
         .single();
@@ -35,11 +36,8 @@ class SubjectRepository {
   }
 
   Future<Subject> getSubject(String id) async {
-    final data = await _supabase
-        .from('subjects')
-        .select()
-        .eq('id', id)
-        .single();
+    final data =
+        await _supabase.from('subjects').select().eq('id', id).single();
     return Subject.fromJson(data);
   }
 

@@ -7,11 +7,11 @@ part 'chat_model.g.dart';
 class ChatSession with _$ChatSession {
   const factory ChatSession({
     required String id,
-    required String subjectId,
-    required String userId,
+    @JsonKey(name: 'subject_id') required String subjectId,
+    @JsonKey(name: 'user_id') required String userId,
     String? title,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'updated_at') required DateTime updatedAt,
   }) = _ChatSession;
 
   factory ChatSession.fromJson(Map<String, dynamic> json) =>
@@ -22,12 +22,12 @@ class ChatSession with _$ChatSession {
 class ChatMessage with _$ChatMessage {
   const factory ChatMessage({
     required String id,
-    required String sessionId,
-    required String subjectId,
-    required String userId,
+    @JsonKey(name: 'session_id') required String sessionId,
+    @JsonKey(name: 'subject_id') required String subjectId,
+    @JsonKey(name: 'user_id') required String userId,
     required String role,
     required String content,
-    required DateTime createdAt,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
   }) = _ChatMessage;
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) =>
