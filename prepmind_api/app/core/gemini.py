@@ -1,8 +1,8 @@
-import os
 import asyncio
 from google import genai
 from google.genai import types
 from app.core.supabase import get_supabase_client
+from app.config import settings
 
 
 class GeminiKeyRotator:
@@ -18,15 +18,17 @@ class GeminiKeyRotator:
         self._load_keys()
 
     def _load_keys(self):
-        i = 1
-        while True:
-            key = os.getenv(f"GEMINI_KEY_{i}")
-            if not key:
-                break
-            self._keys[f"key_{i}"] = key
-            i += 1
+        # Load from pydantic settings (which reads .env file)
+        candidates = [
+            ("key_1", settings.gemini_key_1),
+            ("key_2", settings.gemini_key_2),
+            ("key_3", settings.gemini_key_3),
+        ]
+        for alias, key in candidates:
+            if key:
+                self._keys[alias] = key
         if not self._keys:
-            raise ValueError("No GEMINI_KEY_* environment variables found. Add GEMINI_KEY_1 to .env")
+            raise ValueError("No Gemini API keys found. Set GEMINI_KEY_1 in .env")
 
     @property
     def _key_list(self) -> list[tuple[str, str]]:
