@@ -17,7 +17,10 @@ async def sign_up(payload: SignUpRequest):
         result = supabase.auth.sign_up({
             "email": payload.email,
             "password": payload.password,
-            "options": {"data": {"full_name": payload.full_name}},
+            "options": {
+                "data": {"full_name": payload.full_name},
+                "email_redirect_to": "io.supabase.prepmind://login-callback",
+            },
         })
         return APIResponse(
             data={"user_id": result.user.id if result.user else None},

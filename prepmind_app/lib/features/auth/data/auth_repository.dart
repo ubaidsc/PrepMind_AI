@@ -18,6 +18,7 @@ class AuthRepository {
       email: email,
       password: password,
       data: {'full_name': fullName},
+      emailRedirectTo: 'io.supabase.prepmind://login-callback',
     );
   }
 
