@@ -24,84 +24,87 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ),
       body: profileAsync.when(
-        data: (profile) => ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 44,
-                    backgroundColor: AppColors.primaryLight,
-                    child: Text(
-                      (profile['full_name'] as String? ?? user?.email ?? 'U')
-                          .substring(0, 1)
-                          .toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+        data: (profile) => RefreshIndicator(
+          onRefresh: () async => ref.invalidate(profileProvider),
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 44,
+                      backgroundColor: AppColors.primaryLight,
+                      child: Text(
+                        (profile['full_name'] as String? ?? user?.email ?? 'U')
+                            .substring(0, 1)
+                            .toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    profile['full_name'] as String? ?? 'No name',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    user?.email ?? '',
-                    style: const TextStyle(color: AppColors.textSecondary),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryLight,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      (profile['plan'] as String? ?? 'free').toUpperCase(),
+                    const SizedBox(height: 12),
+                    Text(
+                      profile['full_name'] as String? ?? 'No name',
                       style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      user?.email ?? '',
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLight,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        (profile['plan'] as String? ?? 'free').toUpperCase(),
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
-            const Text(
-              'Usage',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            _UsageCard(
-              label: 'AI Requests',
-              used: profile['ai_requests_used'] as int? ?? 0,
-              limit: profile['ai_requests_limit'] as int? ?? 20,
-              icon: Icons.psychology_outlined,
-            ),
-            const SizedBox(height: 12),
-            _UsageCard(
-              label: 'Documents',
-              used: profile['documents_uploaded'] as int? ?? 0,
-              limit: profile['documents_limit'] as int? ?? 5,
-              icon: Icons.description_outlined,
-            ),
-            const SizedBox(height: 32),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.error),
-              title: const Text('Sign Out',
-                  style: TextStyle(color: AppColors.error)),
-              onTap: () => _confirmSignOut(context, ref),
-            ),
-          ],
+              const SizedBox(height: 32),
+              const Text(
+                'Usage',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              _UsageCard(
+                label: 'AI Requests',
+                used: profile['ai_requests_used'] as int? ?? 0,
+                limit: profile['ai_requests_limit'] as int? ?? 20,
+                icon: Icons.psychology_outlined,
+              ),
+              const SizedBox(height: 12),
+              _UsageCard(
+                label: 'Documents',
+                used: profile['documents_uploaded'] as int? ?? 0,
+                limit: profile['documents_limit'] as int? ?? 5,
+                icon: Icons.description_outlined,
+              ),
+              const SizedBox(height: 32),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.logout, color: AppColors.error),
+                title: const Text('Sign Out',
+                    style: TextStyle(color: AppColors.error)),
+                onTap: () => _confirmSignOut(context, ref),
+              ),
+            ],
+          ),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error loading profile: $e')),
