@@ -7,12 +7,9 @@ class ProfileRepository {
   Future<Map<String, dynamic>> getProfile() async {
     final userId = _supabase.auth.currentUser?.id;
     if (userId == null) throw Exception('Not authenticated');
-    final data = await _supabase
-        .from('profiles')
-        .select()
-        .eq('id', userId)
-        .single();
-    return data as Map<String, dynamic>;
+    final data =
+        await _supabase.from('profiles').select().eq('id', userId).single();
+    return data;
   }
 
   Future<void> updateProfile({String? fullName, String? avatarUrl}) async {

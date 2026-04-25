@@ -102,7 +102,7 @@ class HomeScreen extends ConsumerWidget {
                               color: AppColors.primaryLight,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                  color: AppColors.primary.withOpacity(0.3)),
+                                  color: AppColors.primary.withValues(alpha: 0.3)),
                             ),
                             child: const Row(
                               children: [
