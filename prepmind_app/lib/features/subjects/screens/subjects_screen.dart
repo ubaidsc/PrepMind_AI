@@ -67,7 +67,8 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.menu_book_outlined, size: 64, color: AppColors.textSecondary),
+          const Icon(Icons.menu_book_outlined,
+              size: 64, color: AppColors.textSecondary),
           const SizedBox(height: 16),
           const Text(
             'No subjects yet',
