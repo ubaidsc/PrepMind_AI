@@ -21,13 +21,12 @@ class AppButton extends StatelessWidget {
         ? const SizedBox(
             height: 20,
             width: 20,
-            child: CircularProgressIndicator(
-                strokeWidth: 2, color: Colors.white),
+            child:
+                CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
           )
         : Text(
             label,
-            style: const TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           );
 
     return SizedBox(

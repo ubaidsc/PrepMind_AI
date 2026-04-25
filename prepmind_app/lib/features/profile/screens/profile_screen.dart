@@ -56,8 +56,8 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.primaryLight,
                       borderRadius: BorderRadius.circular(20),
@@ -179,9 +179,7 @@ class _UsageCard extends StatelessWidget {
                 LinearProgressIndicator(
                   value: progress.clamp(0.0, 1.0),
                   backgroundColor: Colors.grey.shade200,
-                  color: progress >= 0.9
-                      ? AppColors.error
-                      : AppColors.primary,
+                  color: progress >= 0.9 ? AppColors.error : AppColors.primary,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ],

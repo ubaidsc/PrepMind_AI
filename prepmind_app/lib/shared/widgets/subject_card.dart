@@ -41,22 +41,19 @@ class SubjectCard extends StatelessWidget {
                 color: _color,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child:
-                  const Icon(Icons.menu_book, color: Colors.white, size: 22),
+              child: const Icon(Icons.menu_book, color: Colors.white, size: 22),
             ),
             const Spacer(),
             Text(
               subject.name,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, fontSize: 14),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 4),
             Text(
               '${subject.documentCount} documents',
-              style: const TextStyle(
-                  color: Color(0xFF6B7280), fontSize: 11),
+              style: const TextStyle(color: Color(0xFF6B7280), fontSize: 11),
             ),
           ],
         ),
