@@ -114,15 +114,13 @@ class _CreateSubjectScreenState extends ConsumerState<CreateSubjectScreen> {
               const SizedBox(height: 24),
               const Text(
                 'Color',
-                style:
-                    TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
               ),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 12,
                 children: _colorOptions.map((color) {
-                  final c = Color(
-                      int.parse(color.replaceAll('#', '0xFF')));
+                  final c = Color(int.parse(color.replaceAll('#', '0xFF')));
                   final isSelected = _selectedColor == color;
                   return GestureDetector(
                     onTap: () => setState(() => _selectedColor = color),
