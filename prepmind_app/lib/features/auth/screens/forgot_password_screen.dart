@@ -75,7 +75,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       const Text(
                         'Reset Password 🔐',
                         style: TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.bold),
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       const Text(
@@ -114,8 +116,11 @@ class _SuccessView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.mark_email_read_outlined,
-            size: 72, color: AppColors.secondary),
+        const Icon(
+          Icons.mark_email_read_outlined,
+          size: 72,
+          color: AppColors.secondary,
+        ),
         const SizedBox(height: 24),
         const Text(
           'Check your inbox',
