@@ -21,18 +21,25 @@ class SubjectRepository {
     String? semester,
     String color = '#6366F1',
   }) async {
-    final data = await _supabase.from('subjects').insert({
-      'name': name,
-      'exam_type': examType,
-      'semester': semester,
-      'color': color,
-    }).select().single();
+    final data = await _supabase
+        .from('subjects')
+        .insert({
+          'name': name,
+          'exam_type': examType,
+          'semester': semester,
+          'color': color,
+        })
+        .select()
+        .single();
     return Subject.fromJson(data);
   }
 
   Future<Subject> getSubject(String id) async {
-    final data =
-        await _supabase.from('subjects').select().eq('id', id).single();
+    final data = await _supabase
+        .from('subjects')
+        .select()
+        .eq('id', id)
+        .single();
     return Subject.fromJson(data);
   }
 
