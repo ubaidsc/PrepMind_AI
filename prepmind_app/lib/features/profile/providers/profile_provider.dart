@@ -6,8 +6,6 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   return ProfileRepository(Supabase.instance.client);
 });
 
-// Use a timestamp-keyed provider so it can be force-refreshed
-final profileProvider =
-    FutureProvider.autoDispose<Map<String, dynamic>>((ref) async {
+final profileProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   return ref.watch(profileRepositoryProvider).getProfile();
 });
