@@ -113,14 +113,14 @@ class GeminiKeyRotator:
         raise last_error
 
     async def get_embedding(self, text: str) -> list[float]:
-        """Generate document embedding using text-embedding-004 (768 dims)."""
+        """Generate document embedding using gemini-embedding-001 (768 dims)."""
         last_error = None
         for _ in range(len(self._key_list)):
             key_alias, api_key = self._get_current()
             try:
                 client = self._make_client(api_key)
                 result = client.models.embed_content(
-                    model="models/text-embedding-004",
+                    model="models/gemini-embedding-001",
                     contents=text,
                     config=types.EmbedContentConfig(
                         task_type="retrieval_document",
@@ -149,7 +149,7 @@ class GeminiKeyRotator:
             try:
                 client = self._make_client(api_key)
                 result = client.models.embed_content(
-                    model="models/text-embedding-004",
+                    model="models/gemini-embedding-001",
                     contents=text,
                     config=types.EmbedContentConfig(
                         task_type="retrieval_query",
