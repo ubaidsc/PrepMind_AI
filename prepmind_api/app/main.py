@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import auth, subjects, documents
+from app.routers import auth, subjects, documents, ai, chat
 
 app = FastAPI(
     title="PrepMind AI API",
@@ -20,6 +20,8 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
 app.include_router(documents.router, prefix="/documents", tags=["documents"])
+app.include_router(ai.router, prefix="/ai", tags=["ai"])
+app.include_router(chat.router, prefix="/chat", tags=["chat"])
 
 
 @app.get("/health")
