@@ -9,6 +9,7 @@ import '../../features/home/screens/home_screen.dart';
 import '../../features/subjects/screens/subjects_screen.dart';
 import '../../features/subjects/screens/create_subject_screen.dart';
 import '../../features/subjects/screens/subject_detail_screen.dart';
+import '../../features/ai_notes/screens/ai_result_screen.dart';
 import '../../features/practice/screens/practice_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../shell/app_shell.dart';
@@ -24,8 +25,7 @@ GoRouter appRouter(Ref ref) {
     redirect: (context, state) {
       final session = supabase.auth.currentSession;
       final isAuth = session != null;
-      final isAuthRoute =
-          state.matchedLocation.startsWith('/login') ||
+      final isAuthRoute = state.matchedLocation.startsWith('/login') ||
           state.matchedLocation.startsWith('/signup') ||
           state.matchedLocation.startsWith('/forgot-password');
 
@@ -54,8 +54,22 @@ GoRouter appRouter(Ref ref) {
               ),
               GoRoute(
                 path: ':id',
-                builder: (c, s) =>
-                    SubjectDetailScreen(subjectId: s.pathParameters['id']!),
+                builder: (c, s) => SubjectDetailScreen(
+                  subjectId: s.pathParameters['id']!,
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'result',
+                    builder: (c, s) {
+                      final extra = s.extra as Map<String, dynamic>? ?? {};
+                      return AiResultScreen(
+                        subjectId: s.pathParameters['id']!,
+                        generationType: extra['type']?.toString() ?? 'summary',
+                        label: extra['label']?.toString() ?? 'AI Notes',
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

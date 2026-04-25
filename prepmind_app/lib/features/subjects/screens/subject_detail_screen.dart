@@ -3,24 +3,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/subjects_provider.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../documents/providers/documents_provider.dart';
+import '../../documents/screens/upload_document_screen.dart';
+import '../../ai_notes/screens/generate_options_screen.dart';
+import '../../chat/screens/chat_screen.dart';
 
-class SubjectDetailScreen extends ConsumerWidget {
+class SubjectDetailScreen extends ConsumerStatefulWidget {
   final String subjectId;
   const SubjectDetailScreen({super.key, required this.subjectId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final subjectAsync = ref.watch(subjectDetailProvider(subjectId));
+  ConsumerState<SubjectDetailScreen> createState() =>
+      _SubjectDetailScreenState();
+}
+
+class _SubjectDetailScreenState extends ConsumerState<SubjectDetailScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final subjectAsync = ref.watch(subjectDetailProvider(widget.subjectId));
 
     return subjectAsync.when(
       data: (subject) {
         final color = Color(int.parse(subject.color.replaceAll('#', '0xFF')));
         return Scaffold(
           backgroundColor: Colors.white,
-          body: CustomScrollView(
-            slivers: [
+          body: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
               SliverAppBar(
-                expandedHeight: 160,
+                expandedHeight: 140,
                 pinned: true,
                 backgroundColor: color,
                 leading: IconButton(
@@ -38,66 +63,36 @@ class SubjectDetailScreen extends ConsumerWidget {
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.delete_outline, color: Colors.white),
-                    onPressed: () => _confirmDelete(context, ref),
+                    onPressed: () => _confirmDelete(context),
                   ),
                 ],
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (subject.examType != null) ...[
-                        _InfoRow(
-                            icon: Icons.assignment_outlined,
-                            label: 'Exam Type',
-                            value: subject.examType!),
-                        const SizedBox(height: 12),
-                      ],
-                      if (subject.semester != null) ...[
-                        _InfoRow(
-                            icon: Icons.calendar_today_outlined,
-                            label: 'Semester',
-                            value: subject.semester!),
-                        const SizedBox(height: 12),
-                      ],
-                      _InfoRow(
-                        icon: Icons.description_outlined,
-                        label: 'Documents',
-                        value: '${subject.documentCount}',
-                      ),
-                      const SizedBox(height: 12),
-                      _InfoRow(
-                        icon: Icons.psychology_outlined,
-                        label: 'AI Notes',
-                        value: '${subject.aiNoteCount}',
-                      ),
-                      const SizedBox(height: 32),
-                      const Text(
-                        'Documents',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'Document upload coming in Phase 2',
-                            style: TextStyle(color: AppColors.textSecondary),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                bottom: TabBar(
+                  controller: _tabController,
+                  indicatorColor: Colors.white,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.white60,
+                  tabs: const [
+                    Tab(text: 'Documents'),
+                    Tab(text: 'AI Notes'),
+                    Tab(text: 'AI Chat'),
+                  ],
                 ),
               ),
             ],
+            body: TabBarView(
+              controller: _tabController,
+              children: [
+                // Tab 1: Documents
+                UploadDocumentScreen(subjectId: widget.subjectId),
+                // Tab 2: AI Notes
+                _AiNotesTab(subjectId: widget.subjectId),
+                // Tab 3: AI Chat
+                ChatScreen(
+                  subjectId: widget.subjectId,
+                  subjectName: subject.name,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -111,7 +106,7 @@ class SubjectDetailScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+  Future<void> _confirmDelete(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -132,30 +127,55 @@ class SubjectDetailScreen extends ConsumerWidget {
       ),
     );
     if (confirmed == true) {
-      await ref.read(subjectRepositoryProvider).deleteSubject(subjectId);
+      await ref.read(subjectRepositoryProvider).deleteSubject(widget.subjectId);
       ref.invalidate(subjectsProvider);
-      if (context.mounted) context.go('/subjects');
+      if (mounted && context.mounted) context.go('/subjects');
     }
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  const _InfoRow(
-      {required this.icon, required this.label, required this.value});
+// ─── AI Notes Tab ─────────────────────────────────────────────────────────────
+
+class _AiNotesTab extends ConsumerWidget {
+  final String subjectId;
+  const _AiNotesTab({required this.subjectId});
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: AppColors.textSecondary),
-        const SizedBox(width: 8),
-        Text('$label: ',
-            style: const TextStyle(color: AppColors.textSecondary)),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
-      ],
+  Widget build(BuildContext context, WidgetRef ref) {
+    final docsAsync = ref.watch(documentsProvider(subjectId));
+
+    return docsAsync.when(
+      data: (docs) {
+        final hasReadyDocs = docs.any((d) => d.status == 'ready');
+        if (!hasReadyDocs) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.upload_file_outlined,
+                      size: 64, color: AppColors.textSecondary),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'No processed documents yet',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Upload documents in the Documents tab and wait for processing to complete.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+        return GenerateOptionsScreen(subjectId: subjectId);
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
 }
