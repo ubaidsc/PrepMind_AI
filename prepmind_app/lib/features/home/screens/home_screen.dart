@@ -13,11 +13,9 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final subjectsAsync = ref.watch(subjectsProvider);
-    final firstName = user?.userMetadata?['full_name']
-            ?.toString()
-            .split(' ')
-            .first ??
-        'Student';
+    final firstName =
+        user?.userMetadata?['full_name']?.toString().split(' ').first ??
+            'Student';
 
     return Scaffold(
       backgroundColor: Colors.white,
