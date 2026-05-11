@@ -47,6 +47,10 @@ app.*.map.json
 # dotenv
 .env
 
+# Firebase config (contains API keys — do not commit)
+google-services.json
+GoogleService-Info.plist
+
 # Generated
 *.g.dart
 *.freezed.dart

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/dio_provider.dart';
 import '../data/ai_note_model.dart';
@@ -41,6 +42,13 @@ class AiNotesNotifier extends StateNotifier<AsyncValue<AiGeneration?>> {
         createdAt: DateTime.now(),
       );
       state = AsyncValue.data(generation);
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'ai_content_generated',
+        parameters: {
+          'subject_id': _key.subjectId,
+          'generation_type': _key.generationType,
+        },
+      );
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }

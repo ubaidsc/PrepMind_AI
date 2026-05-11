@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
@@ -59,6 +60,10 @@ class _UploadDocumentScreenState extends ConsumerState<UploadDocumentScreen> {
       ref.invalidate(documentsProvider(widget.subjectId));
 
       if (finished.status == 'ready') {
+        await FirebaseAnalytics.instance.logEvent(
+          name: 'document_uploaded',
+          parameters: {'file_type': file.extension ?? 'unknown'},
+        );
         _showStatus('${file.name} is ready!', success: true);
       } else {
         _showStatus(

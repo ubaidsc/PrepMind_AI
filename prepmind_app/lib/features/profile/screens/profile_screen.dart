@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -97,6 +99,17 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 32),
               const Divider(),
+              ListTile(
+                leading:
+                    const Icon(Icons.bug_report_outlined, color: Colors.orange),
+                title: const Text('Test Crash Report',
+                    style: TextStyle(color: Colors.orange)),
+                onTap: () async {
+                  await FirebaseAnalytics.instance
+                      .logEvent(name: 'test_crash_triggered');
+                  FirebaseCrashlytics.instance.crash();
+                },
+              ),
               ListTile(
                 leading: const Icon(Icons.logout, color: AppColors.error),
                 title: const Text('Sign Out',
