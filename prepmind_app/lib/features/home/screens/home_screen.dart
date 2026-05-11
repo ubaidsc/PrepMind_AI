@@ -42,35 +42,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    const Text(
-                      'Ready to revise?',
-                      style: TextStyle(color: AppColors.textSecondary),
-                    ),
                     const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _QuickActionCard(
-                            title: 'Revision Planner',
-                            subtitle: 'Plan your study schedule',
-                            color: AppColors.primary,
-                            icon: Icons.calendar_today,
-                            onTap: () {},
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _QuickActionCard(
-                            title: 'Quick Practice',
-                            subtitle: 'Test your knowledge',
-                            color: AppColors.secondary,
-                            icon: Icons.trending_up,
-                            onTap: () => context.go('/practice'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 28),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
