@@ -18,6 +18,8 @@ final dioProvider = Provider<Dio>((ref) {
       if (token != null) {
         options.headers['Authorization'] = 'Bearer $token';
       }
+      // Bypass ngrok browser-warning interstitial for API clients
+      options.headers['ngrok-skip-browser-warning'] = 'true';
       handler.next(options);
     },
   ));
