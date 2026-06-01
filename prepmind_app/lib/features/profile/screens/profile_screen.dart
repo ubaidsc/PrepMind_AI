@@ -145,6 +145,9 @@ class ProfileScreen extends ConsumerWidget {
       ),
     );
     if (confirmed == true) {
+      // Clear encrypted profile cache before signing out so the next user
+      // on this device cannot access the previous user's locally cached PII.
+      await ref.read(profileRepositoryProvider).clearCache();
       await ref.read(authRepositoryProvider).signOut();
       if (context.mounted) context.go('/login');
     }

@@ -24,6 +24,11 @@ dependencies:
   dio: ^5.7.0
   connectivity_plus: ^6.1.0
 
+  # Local storage & encryption
+  shared_preferences: ^2.3.3
+  encrypt: ^5.0.3
+  pointycastle: ^3.9.1
+
   # UI
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
