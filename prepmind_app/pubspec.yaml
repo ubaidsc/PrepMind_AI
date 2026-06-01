@@ -22,6 +22,7 @@ dependencies:
 
   # Network
   dio: ^5.7.0
+  connectivity_plus: ^6.1.0
 
   # UI
   google_fonts: ^6.2.1

@@ -22,6 +22,29 @@ final dioProvider = Provider<Dio>((ref) {
       options.headers['ngrok-skip-browser-warning'] = 'true';
       handler.next(options);
     },
+    onError: (DioException error, handler) {
+      // Convert low-level network errors into a readable exception so every
+      // caller (provider / screen) sees the same clean message instead of the
+      // raw Dio stack trace.
+      final isNetworkError = error.type == DioExceptionType.connectionError ||
+          error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.receiveTimeout ||
+          error.type == DioExceptionType.sendTimeout;
+
+      if (isNetworkError) {
+        handler.reject(
+          DioException(
+            requestOptions: error.requestOptions,
+            type: error.type,
+            error: error.error,
+            message:
+                'No internet connection. Please check your network and try again.',
+          ),
+        );
+        return;
+      }
+      handler.next(error);
+    },
   ));
 
   return dio;
