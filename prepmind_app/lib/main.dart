@@ -7,6 +7,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/router/app_router.dart';
 import 'core/constants/app_colors.dart';
+import 'core/utils/provider_logger.dart';
+import 'core/services/notification_service.dart';
+import 'core/services/background_task_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +28,16 @@ void main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
-  runApp(const ProviderScope(child: PrepMindApp()));
+  // Initialize notifications & background tasks
+  await NotificationService.initialize();
+  await BackgroundTaskManager.initialize();
+
+  runApp(
+    ProviderScope(
+      observers: [ProviderLogger()],
+      child: const PrepMindApp(),
+    ),
+  );
 }
 
 class PrepMindApp extends ConsumerWidget {

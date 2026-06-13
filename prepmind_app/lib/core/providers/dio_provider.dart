@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
+import '../services/log_service.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://10.0.2.2:8000';
@@ -46,6 +48,16 @@ final dioProvider = Provider<Dio>((ref) {
       handler.next(error);
     },
   ));
+
+  dio.interceptors.add(
+    TalkerDioLogger(
+      talker: LogService.talker,
+      settings: const TalkerDioLoggerSettings(
+        printRequestHeaders: true,
+        printResponseHeaders: false,
+      ),
+    ),
+  );
 
   return dio;
 });

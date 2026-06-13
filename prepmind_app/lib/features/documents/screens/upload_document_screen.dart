@@ -3,6 +3,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/permission_service.dart';
+import '../../../core/services/background_task_manager.dart';
+import '../../../core/services/log_service.dart';
 import '../providers/documents_provider.dart';
 
 class UploadDocumentScreen extends ConsumerStatefulWidget {
@@ -20,6 +23,13 @@ class _UploadDocumentScreenState extends ConsumerState<UploadDocumentScreen> {
   bool _isSuccess = false;
 
   Future<void> _pickAndUpload() async {
+    // Check and request storage permission
+    final hasPermission = await PermissionService.requestStoragePermission();
+    if (!hasPermission) {
+      _showStatus('Storage permission is required to upload files.', success: false);
+      return;
+    }
+
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'docx', 'pptx'],
@@ -44,6 +54,13 @@ class _UploadDocumentScreenState extends ConsumerState<UploadDocumentScreen> {
       final doc = await ref
           .read(documentRepositoryProvider)
           .uploadDocument(widget.subjectId, file);
+
+      // Register background polling task so status polling survives if app is minimized/closed
+      BackgroundTaskManager.registerDocumentPolling(
+        widget.subjectId,
+        doc.id,
+        file.name,
+      );
 
       setState(() {
         _statusMessage = 'Uploaded! Processing in background…';
@@ -71,7 +88,8 @@ class _UploadDocumentScreenState extends ConsumerState<UploadDocumentScreen> {
           success: false,
         );
       }
-    } on Exception catch (e) {
+    } on Exception catch (e, stack) {
+      LogService.error('Upload failed', e, stack);
       _showStatus('Upload failed: $e', success: false);
     } finally {
       if (mounted) setState(() => _isUploading = false);
