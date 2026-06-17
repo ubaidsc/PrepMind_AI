@@ -119,6 +119,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   validator: Validators.password,
                 ),
+                // TODO: Unhide Forgot Password later
+                /*
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -129,12 +131,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                */
+                const SizedBox(height: 24),
                 AppButton(
                   label: 'Sign In',
                   onPressed: _signIn,
                   isLoading: _isLoading,
                 ),
+                // TODO: Unhide Google Sign In later
+                /*
                 const SizedBox(height: 16),
                 AppButton(
                   label: 'Continue with Google',
@@ -142,6 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   isOutlined: true,
                   isLoading: _isGoogleLoading,
                 ),
+                */
                 const SizedBox(height: 40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

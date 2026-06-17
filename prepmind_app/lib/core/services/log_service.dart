@@ -2,14 +2,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class LogService {
-  static final Talker talker = Talker(
-    settings: TalkerSettings(
-      colorsMap: {
-        TalkerLogType.info.key: AnsiPen()..blue(),
-        TalkerLogType.error.key: AnsiPen()..red(),
-      },
-    ),
-  );
+  static final Talker talker = Talker();
 
   static void info(String message) => talker.info(message);
   

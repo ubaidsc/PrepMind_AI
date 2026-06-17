@@ -12,7 +12,7 @@ class NotificationService {
     const DarwinInitializationSettings iosSettings = DarwinInitializationSettings();
     
     await _localNotifications.initialize(
-      const InitializationSettings(android: androidSettings, iOS: iosSettings),
+      settings: const InitializationSettings(android: androidSettings, iOS: iosSettings),
     );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -25,10 +25,10 @@ class NotificationService {
 
   static Future<void> showNotification(String title, String body) async {
     await _localNotifications.show(
-      title.hashCode,
-      title,
-      body,
-      const NotificationDetails(
+      id: title.hashCode,
+      title: title,
+      body: body,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'document_channel',
           'Document Alerts',
