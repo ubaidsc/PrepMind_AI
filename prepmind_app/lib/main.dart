@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'core/router/app_router.dart';
 import 'core/constants/app_colors.dart';
 import 'core/utils/provider_logger.dart';
@@ -31,6 +32,9 @@ void main() async {
   // Initialize notifications & background tasks
   await NotificationService.initialize();
   await BackgroundTaskManager.initialize();
+  
+  // Initialize Google Mobile Ads SDK
+  await MobileAds.instance.initialize();
 
   runApp(
     ProviderScope(

@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../subjects/providers/subjects_provider.dart';
 import '../../../shared/widgets/subject_card.dart';
+import '../../../shared/widgets/banner_ad_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -129,6 +130,7 @@ class HomeScreen extends ConsumerWidget {
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
+      bottomNavigationBar: const BannerAdWidget(),
     );
   }
 }
