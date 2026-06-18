@@ -61,65 +61,65 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            subjectsAsync.when(
-              data: (subjects) => subjects.isEmpty
-                  ? SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: GestureDetector(
-                          onTap: () => context.push('/subjects/create'),
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryLight,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                  color:
-                                      AppColors.primary.withValues(alpha: 0.3)),
-                            ),
-                            child: const Row(
-                              children: [
-                                Icon(Icons.add_circle_outline,
-                                    color: AppColors.primary),
-                                SizedBox(width: 12),
-                                Text(
-                                  'Add your first subject',
-                                  style: TextStyle(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          ),
+            Builder(
+              builder: (ctx) {
+                final emptyStateWidget = SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: GestureDetector(
+                      onTap: () => context.push('/subjects/create'),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryLight,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.3)),
                         ),
-                      ),
-                    )
-                  : SliverPadding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      sliver: SliverGrid(
-                        delegate: SliverChildBuilderDelegate(
-                          (ctx, i) => SubjectCard(
-                            subject: subjects[i],
-                            onTap: () =>
-                                context.go('/subjects/${subjects[i].id}'),
-                          ),
-                          childCount: subjects.take(4).length,
-                        ),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          childAspectRatio: 1.1,
+                        child: const Row(
+                          children: [
+                            Icon(Icons.add_circle_outline, color: AppColors.primary),
+                            SizedBox(width: 12),
+                            Text(
+                              'Add your first subject',
+                              style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-              loading: () => const SliverToBoxAdapter(
-                child: Center(child: CircularProgressIndicator()),
-              ),
-              error: (e, _) => SliverToBoxAdapter(
-                child: Center(child: Text('Error: $e')),
-              ),
+                  ),
+                );
+
+                return subjectsAsync.when(
+                  data: (subjects) => subjects.isEmpty
+                      ? emptyStateWidget
+                      : SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          sliver: SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (ctx, i) => SubjectCard(
+                                subject: subjects[i],
+                                onTap: () => context.go('/subjects/${subjects[i].id}'),
+                              ),
+                              childCount: subjects.take(4).length,
+                            ),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 1.1,
+                            ),
+                          ),
+                        ),
+                  loading: () => const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  error: (e, _) => emptyStateWidget,
+                );
+              },
             ),
           ],
         ),

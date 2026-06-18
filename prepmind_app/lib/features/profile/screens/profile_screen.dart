@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/profile_provider.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../subjects/providers/subjects_provider.dart';
 import '../../../core/constants/app_colors.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -148,6 +149,8 @@ class ProfileScreen extends ConsumerWidget {
       // Clear encrypted profile cache before signing out so the next user
       // on this device cannot access the previous user's locally cached PII.
       await ref.read(profileRepositoryProvider).clearCache();
+      ref.invalidate(profileProvider); // Clear Riverpod memory cache
+      ref.invalidate(subjectsProvider); // Clear subjects memory cache
       await ref.read(authRepositoryProvider).signOut();
       if (context.mounted) context.go('/login');
     }

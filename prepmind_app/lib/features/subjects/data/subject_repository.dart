@@ -9,6 +9,7 @@ class SubjectRepository {
     final data = await _supabase
         .from('subjects')
         .select()
+        .eq('user_id', _supabase.auth.currentUser!.id)
         .order('updated_at', ascending: false);
     return (data as List)
         .map((e) => Subject.fromJson(e as Map<String, dynamic>))

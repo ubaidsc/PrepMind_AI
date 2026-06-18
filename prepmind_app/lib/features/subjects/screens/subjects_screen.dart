@@ -46,7 +46,7 @@ class SubjectsScreen extends ConsumerWidget {
                 ),
               ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+        error: (e, _) => _EmptyState(onAdd: () => context.push('/subjects/create')),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/subjects/create'),
