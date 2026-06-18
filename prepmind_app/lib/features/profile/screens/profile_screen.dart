@@ -6,6 +6,9 @@ import 'package:go_router/go_router.dart';
 import '../providers/profile_provider.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../subjects/providers/subjects_provider.dart';
+import '../../documents/providers/documents_provider.dart';
+import '../../chat/providers/chat_provider.dart';
+import '../../ai_notes/providers/ai_notes_provider.dart';
 import '../../../core/constants/app_colors.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -149,8 +152,17 @@ class ProfileScreen extends ConsumerWidget {
       // Clear encrypted profile cache before signing out so the next user
       // on this device cannot access the previous user's locally cached PII.
       await ref.read(profileRepositoryProvider).clearCache();
-      ref.invalidate(profileProvider); // Clear Riverpod memory cache
-      ref.invalidate(subjectsProvider); // Clear subjects memory cache
+      
+      // Clear Riverpod memory cache for all user-specific providers
+      ref.invalidate(profileProvider);
+      ref.invalidate(subjectsProvider);
+      ref.invalidate(subjectDetailProvider);
+      ref.invalidate(documentsProvider);
+      ref.invalidate(chatProvider);
+      ref.invalidate(chatSessionsProvider);
+      ref.invalidate(aiNotesProvider);
+      ref.invalidate(aiHistoryProvider);
+      
       await ref.read(authRepositoryProvider).signOut();
       if (context.mounted) context.go('/login');
     }
