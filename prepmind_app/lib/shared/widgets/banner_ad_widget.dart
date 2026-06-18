@@ -12,6 +12,7 @@ class BannerAdWidget extends StatefulWidget {
 
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
+  Widget? _adWidget;
   bool _isLoaded = false;
   bool _isClosed = false;
 
@@ -43,6 +44,8 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
         },
       ),
     )..load();
+    
+    _adWidget = AdWidget(ad: _bannerAd!);
   }
 
   @override
@@ -57,7 +60,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
       return const SizedBox.shrink();
     }
 
-    if (_isLoaded && _bannerAd != null) {
+    if (_isLoaded && _bannerAd != null && _adWidget != null) {
       return Container(
         color: Colors.grey.shade50,
         child: Column(
@@ -90,7 +93,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
               alignment: Alignment.center,
               width: _bannerAd!.size.width.toDouble(),
               height: _bannerAd!.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd!),
+              child: _adWidget!,
             ),
           ],
         ),
