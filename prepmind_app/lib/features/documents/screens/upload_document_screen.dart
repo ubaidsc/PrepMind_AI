@@ -23,13 +23,6 @@ class _UploadDocumentScreenState extends ConsumerState<UploadDocumentScreen> {
   bool _isSuccess = false;
 
   Future<void> _pickAndUpload() async {
-    // Check and request storage permission
-    final hasPermission = await PermissionService.requestStoragePermission();
-    if (!hasPermission) {
-      _showStatus('Storage permission is required to upload files.', success: false);
-      return;
-    }
-
     // Explicitly request notification permission for the viva
     await PermissionService.requestNotificationPermission();
 
