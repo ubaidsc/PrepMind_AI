@@ -30,6 +30,9 @@ class _UploadDocumentScreenState extends ConsumerState<UploadDocumentScreen> {
       return;
     }
 
+    // Explicitly request notification permission for the viva
+    await PermissionService.requestNotificationPermission();
+
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'docx', 'pptx'],
